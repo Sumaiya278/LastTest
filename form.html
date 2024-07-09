@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Display Images in Table</title>
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  table, th, td {
+    border: 1px solid black;
+  }
+  th, td {
+    padding: 10px;
+    text-align: center;
+  }
+  img {
+    max-width: 100px;
+    max-height: 100px;
+    display: block;
+    margin: 0 auto;
+  }
+  .error {
+    color: red;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+  <h2>Display Images in Table</h2>
+  
+  <form id="imageForm">
+    <label for="imageCount">Enter a number (default is 4):</label>
+    <input type="number" id="imageCount" name="imageCount" min="1" value="4">
+    <button type="submit">Display Images</button>
+  </form>
+
+  <div id="errorMessage" class="error" style="display: none;"></div>
+
+  <div id="imageTable"></div>
+
+  <script>
+    document.getElementById('imageForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      clearErrorMessage();
+
+      var imageCountInput = document.getElementById('imageCount').value;
+      var imageCount = parseInt(imageCountInput, 10);
+
+      if (isNaN(imageCount) || imageCount < 1 || imageCount % 2 !== 0) {
+        displayErrorMessage();
+      } else {
+        displayImageTable(imageCount);
+      }
+    });
+
+    function clearErrorMessage() {
+      var errorMessage = document.getElementById('errorMessage');
+      errorMessage.style.display = 'none';
+    }
+
+    function displayErrorMessage() {
+      var errorMessage = document.getElementById('errorMessage');
+      errorMessage.textContent = 'Invalid input. Please enter an even number greater than 0.';
+      errorMessage.style.display = 'block';
+      clearImageTable();
+    }
+
+    function clearImageTable() {
+      var imageTable = document.getElementById('imageTable');
+      imageTable.innerHTML = '';
+    }
+
+    function displayImageTable(imageCount) {
+      clearErrorMessage();
+
+      var imageTable = document.getElementById('imageTable');
+      imageTable.innerHTML = '';
+
+      var table = document.createElement('table');
+      var tbody = document.createElement('tbody');
+
+      for (var i = 1; i <= imageCount; i += 2) {
+        var tr = document.createElement('tr');
+
+        var td1 = document.createElement('td');
+        var img1 = document.createElement('img');
+        img1.src = `college${i}.jpg`;
+        img1.alt = `College ${i}`;
+        td1.appendChild(img1);
+
+        var td2 = document.createElement('td');
+        if (i + 1 <= imageCount) {
+          var img2 = document.createElement('img');
+          img2.src = `college${i + 1}.jpg`;
+          img2.alt = `College ${i + 1}`;
+          td2.appendChild(img2);
+        }
+
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+
+        tbody.appendChild(tr);
+      }
+
+      table.appendChild(tbody);
+      imageTable.appendChild(table);
+    }
+  </script>
+</body>
+</html>
+
